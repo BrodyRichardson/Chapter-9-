@@ -16,6 +16,12 @@ class Receipt
       end
     end
   end
+  def Display
+    puts "You are buying product #{@item}"
+    puts "Your subtotal is $#{@subtotal}"
+    puts "Tax is #{@Tax}"
+    puts "Your final total is #{@total}"
+  end
 end
 
 $y = 0
@@ -23,19 +29,19 @@ $items = []
 $productNumbers = []
 
 def DefaultItem
-   item = Product.new(0000, "Default Item", 5, $y)
+   item = Product.new("0000", "Default Item", 5, $y, 3.50)
    $items.append(item)
    $productNumbers.append(item.productNumber)
    Menu()
 end
 
-def Visual 
+def Visual
   puts
   print "Your subtotal is $#{@subtotal} \n"
   print "Your sales tax is $#{@Tax} \n"
   print "The total of your purchase is $#{@total} \n"
 end
-  
+
 
 def Menu
   puts
@@ -50,6 +56,8 @@ def Menu
     Lookup()
   elsif choice == "3"
     Purchase()
+  elsif choice == "4"
+    abort("Now Exiting Program")
   else
     Menu()
   end
@@ -58,7 +66,7 @@ end
 def Purchase
   puts
   for i in $items
-    i.Visual
+    i.Display
     puts
   end
 
@@ -72,7 +80,7 @@ def Purchase
     for i in $items
       if i.productNumber == itemP
         currentItem = i
-        i.Visual
+        i.Display
       else
         next
       end
@@ -107,6 +115,7 @@ def Lookup()
   print "What is the product number you are looking for?: "
   number = gets.chomp
   x = 0
+  puts $productNumbers
   for i in $productNumbers
     if i == number
       break
@@ -116,7 +125,7 @@ def Lookup()
     end
   end
   begin
-    print $items[x].Display
+    puts $items[x].Display
   rescue
     puts "Sorry, that item couldn't be found."
   end
@@ -148,12 +157,10 @@ def Newitem()
   print "The usual markup rate is 300% \n"
 
   print "How many in stock?: "
-  quantity = gets
+  quantity = gets.to_i
   arraypos = $y
 
-  $items.append(Product.new(productNumber, description, quantity, arraypos))
-  
-  $items[arraypos].Visual
+  $items.append(Product.new(productNumber, description, quantity, arraypos, cost))
 
   $y += 1
 
